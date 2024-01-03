@@ -1,0 +1,124 @@
+#!/bin/bash
+
+# Function to get file information
+get_file_info() {
+    local filename="$1"
+    local print_size=false
+    local print_permissions=false
+    local print_owner=false
+    local print_last_modified=false
+
+    while [[ $# -gt 1 ]]; do
+        case "$2" in
+            --size | -s)
+                print_size=true
+                ;;
+            --permissions | -p)
+                print_permissions=true
+                ;;
+            --owner | -o)
+                print_owner=true
+                ;;
+            --last-modified | -m)
+                print_last_modified=true
+                ;;
+            *)
+                echo "Invalid option: $2"
+                return 1
+                ;;
+        esac
+        shift 2
+    done
+
+    if [[ ! -f "$filename" ]]; then
+        echo "File '$filename' not found."
+        return 1
+    fi
+
+    if [[ $print_size || $print_permissions || $print_owner || $print_last_modified ]]; then
+        # Only print specified fields
+        if [[ $print_size ]]; then
+            stat -c %s "$filename"
+        fi
+        if [[ $print_permissions ]]; then
+            stat -c %a "$filename"
+        fi
+        if [[ $print_owner ]]; then
+            stat -c %U "$filename"
+        fi
+        if [[ $print_last_modified ]]; then
+            stat -c %y "$filename"
+        fi
+    else
+        # Print all fields in specified format
+        echo "File: $filename"
+        echo "Access: $(stat -c %a "$filename")"
+        echo "Size(B): $(stat -c %s "$filename")"
+        echo "Owner: $(stat -c %U "$filename")"
+        echo "Modify: $(stat -c %y "$filename")"
+    fi
+}
+
+# Function to display manual page
+man_page() {
+    cat << EOF
+INTERNSCTL(1)                       General Commands Manual                      INTERNSCTL(1)
+
+NAME
+       internsctl - A command for managing interns (placeholder description)
+
+SYNOPSIS
+       internsctl [OPTIONS]
+
+DESCRIPTION
+       Internsctl is a command-line tool for managing interns.
+       (Add detailed description and usage examples here)
+
+OPTIONS
+       -h, --help    Display this help message
+       -v, --version Display the version of internsctl
+
+SEE ALSO
+       man(1)
+
+AUTHOR
+       You (your name and contact information)
+
+REPORTING BUGS
+       (Instructions on how to report bugs)
+EOF
+}
+
+# Function to display help message
+help_message() {
+    echo "Usage: internsctl [OPTIONS]"
+    echo "Options:"
+    echo "  -h, --help    Display this help message"
+    echo "  -v, --version Display the version of internsctl"
+}
+
+# Function to display version
+version() {
+    echo "internsctl v0.1.0"
+}
+
+# Main function to handle options
+main() {
+    # ... existing cases ...
+    file)
+        case "$2" in
+            getinfo)
+                get_file_info "$3" "$4" "$5" "$6"
+                ;;
+            *)
+                echo "Invalid subcommand for 'file'"
+                ;;
+        esac
+        ;;
+    # ... other cases ...
+    *)
+        # ... handle other cases or display manual page ...
+        ;;
+esac
+
+main "$@"

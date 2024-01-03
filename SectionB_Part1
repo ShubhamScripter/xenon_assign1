@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Function to get CPU information
+get_cpu_info() {
+    lscpu
+}
+
+# Function to get memory information
+get_memory_info() {
+    free
+}
+
+# Function to display manual page
+man_page() {
+    cat << EOF
+INTERNSCTL(1)                       General Commands Manual                      INTERNSCTL(1)
+
+NAME
+       internsctl - A command for managing interns (placeholder description)
+
+SYNOPSIS
+       internsctl [OPTIONS]
+
+DESCRIPTION
+       Internsctl is a command-line tool for managing interns.
+       (Add detailed description and usage examples here)
+
+OPTIONS
+       -h, --help    Display this help message
+       -v, --version Display the version of internsctl
+
+SEE ALSO
+       man(1)
+
+AUTHOR
+       You (your name and contact information)
+
+REPORTING BUGS
+       (Instructions on how to report bugs)
+EOF
+}
+
+# Function to display help message
+help_message() {
+    echo "Usage: internsctl [OPTIONS]"
+    echo "Options:"
+    echo "  -h, --help    Display this help message"
+    echo "  -v, --version Display the version of internsctl"
+}
+
+# Function to display version
+version() {
+    echo "internsctl v0.1.0"
+}
+
+# Main function to handle options
+main() {
+    case "$1" in
+        # ... existing options ...
+        cpu)
+            case "$2" in
+                getinfo)
+                    get_cpu_info
+                    ;;
+                *)
+                    echo "Invalid subcommand for 'cpu'"
+                    ;;
+            esac
+            ;;
+        memory)
+            case "$2" in
+                getinfo)
+                    get_memory_info
+                    ;;
+                *)
+                    echo "Invalid subcommand for 'memory'"
+                    ;;
+            esac
+            ;;
+        *)
+            # ... handle other cases or display manual page ...
+            ;;
+    esac
+}
+
+main "$@"

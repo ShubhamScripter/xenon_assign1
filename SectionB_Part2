@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Function to create a new user
+create_user() {
+    if [[ $# -ne 1 ]]; then
+        echo "Usage: internsctl user create <username>"
+        return 1
+    fi
+    sudo useradd -m $1
+    echo "User '$1' created successfully."
+}
+
+# Function to list regular users
+list_regular_users() {
+    getent passwd | cut -d: -f1 | grep -v "^root" | grep -v -E "^#"
+}
+
+# Function to list sudo users
+list_sudo_users() {
+    grep -v -E "^#" /etc/sudoers | grep -E "^\s*[a-zA-Z0-9_]+\s+ALL=(ALL:ALL)" | cut -d" " -f1
+}
+
+# Function to display manual page
+man_page() {
+    cat << EOF
+INTERNSCTL(1)                       General Commands Manual                      INTERNSCTL(1)
+
+NAME
+       internsctl - A command for managing interns (placeholder description)
+
+SYNOPSIS
+       internsctl [OPTIONS]
+
+DESCRIPTION
+       Internsctl is a command-line tool for managing interns.
+       (Add detailed description and usage examples here)
+
+OPTIONS
+       -h, --help    Display this help message
+       -v, --version Display the version of internsctl
+
+SEE ALSO
+       man(1)
+
+AUTHOR
+       You (your name and contact information)
+
+REPORTING BUGS
+       (Instructions on how to report bugs)
+EOF
+}
+
+# Function to display help message
+help_message() {
+    echo "Usage: internsctl [OPTIONS]"
+    echo "Options:"
+    echo "  -h, --help    Display this help message"
+    echo "  -v, --version Display the version of internsctl"
+}
+
+# Function to display version
+version() {
+    echo "internsctl v0.1.0"
+}
+
+# Main function to handle options
+main() {
+    case "$1" in
+        # ... existing options ...
+        user)
+            case "$2" in
+                create)
+                    create_user "$3"
+                    ;;
+                list)
+                    if [[ "$3" == "--sudo-only" ]]; then
+                        list_sudo_users
+                    else
+                        list_regular_users
+                    fi
+                    ;;
+                *)
+                    echo "Invalid subcommand for 'user'"
+                    ;;
+            esac
+            ;;
+        # ... other cases ...
+        *)
+            # ... handle other cases or display manual page ...
+            ;;
+    esac
+}
+
+main "$@"
